@@ -2,7 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.5.
 
-**Live Demo:** [https://your-project.web.app](https://radio-translator-2c955.web.app/)
+**Live Demo:** https://radio-translator-2c955.web.app/
 
 ### Screenshot
 <img width="2154" height="1207" alt="image" src="https://github.com/user-attachments/assets/15154ba8-7f8c-46bc-885f-68fbc20cac38" />
