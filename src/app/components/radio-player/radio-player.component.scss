@@ -73,10 +73,15 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   
   .current-info {
-    margin: 0;
     font-size: 16px;
     color: rgba(255, 255, 255, 0.9);
     font-style: italic;
+  }
+
+  .current-track {
+    margin: 10px 0;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 

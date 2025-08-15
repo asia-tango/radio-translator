@@ -1,12 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
-interface Track {
-  id: string;
-  title: string;
-  artist: string;
-  url: string;
-}
+import  {RadioSchedulerService, Track } from 'src/app/services/radioSchedulerService.service';
 
 @Component({
   selector: 'app-radio-player',
@@ -19,26 +13,7 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
   currentTrackIndex = new BehaviorSubject(0);
   isPlaying = new BehaviorSubject(false);
 
-  playlist: Track[] = [
-    {
-      id: '1',
-      title: 'Track 1',
-      artist: 'Artist 1',
-      url: 'assets/audio/track1.mp3'
-    },
-    {
-      id: '2', 
-      title: 'Track 2',
-      artist: 'Artist 2',
-      url: 'assets/audio/Miley-Cyrys-Wrecking-Ball.mp3'
-    },
-    {
-      id: '3', 
-      title: 'Track 3',
-      artist: 'Artist 3',
-      url: 'assets/audio/Maroon-5-Sugar.mp3'
-    }
-  ];
+  playlist: Track[] = [];
   
   get currentTrack() {
     const index = this.currentTrackIndex.value;
@@ -50,8 +25,15 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
     };
   }
 
+  constructor(private radioSchedulerService: RadioSchedulerService) {}
+
   ngOnInit(): void {
     this.initializeAudio();
+
+    this.radioSchedulerService.loadTracks().subscribe(tracks => {
+		this.playlist = tracks;
+		this.loadRandomTrack();
+	});
   }
 
   private initializeAudio(): void {
@@ -66,14 +48,10 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
       this.isPlaying.next(true);
     });
     
-    this.audio.addEventListener('pause', () => {
-      this.isPlaying.next(false);
-    });
-    
     this.loadRandomTrack();
   }
 
-  private loadRandomTrack(): void {
+  private loadRandomTrack(): void {//TODO: fix random to play music without duplicates
     if (this.audio && this.playlist.length > 0) {
       const randomIndex = Math.floor(Math.random() * this.playlist.length);
       this.audio.src = this.playlist[randomIndex].url;
@@ -83,9 +61,7 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
 
   private playNextTrack(): void {
     this.loadRandomTrack();
-    if (this.isPlaying.value) {
-      this.audio?.play();
-    }
+    this.audio?.play();
   }
 
   playPause(): void {
@@ -93,6 +69,7 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
     
     if (this.isPlaying.value) {
       this.audio.pause();
+      this.isPlaying.next(false);
     } else {
       this.audio.play();
     }
