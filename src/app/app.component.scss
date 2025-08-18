@@ -1,0 +1,59 @@
+.nav-wrap {
+  height: 50px;
+  padding-left: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  
+
+  a {
+    display: inline-block;
+    color: rgb(96, 14, 14);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    transition: color .25s ease, transform .25s ease;
+    transform-origin: left center;
+  }
+
+  a:hover {
+    color: rgb(136, 22, 22);
+    transform: scale(1.08);
+  }
+
+  a.active {
+    border-bottom: 3px solid rgb(96, 14, 14);
+  }
+}
+
+.main-wrap{
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.mood-picker{
+  position: static;
+  pointer-events: auto !important;
+}
+
+.mood-picker .inner-wrap{
+  pointer-events: auto;
+}
+
+.mood-btn.mat-mdc-outlined-button {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.7);
+  color: #fff;
+}
+
+.player.player-full{
+  min-height: auto;
+  display: block;
+}

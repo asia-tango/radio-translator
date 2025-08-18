@@ -1,1 +1,16 @@
-<app-radio-player></app-radio-player>
+<nav class="nav-wrap">
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+  <a routerLink="/help" routerLinkActive="active">Help</a>
+</nav>
+
+<div class="main-wrap">
+  <div class="mood-picker">
+    <button mat-stroked-button class="mood-btn" (click)="openMoodDialog()">Choose your mood</button>
+  </div>
+
+  <div class="player" [ngClass]="isHome ? 'player-full' : 'player-mini'">
+    <app-radio-player></app-radio-player>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

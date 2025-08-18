@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import  {RadioSchedulerService, Track } from 'src/app/services/radioSchedulerService.service';
+import { RadioSchedulerService, Track } from 'src/app/services/radioSchedulerService.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-radio-player',
@@ -14,6 +15,7 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
   isPlaying = new BehaviorSubject(false);
 
   playlist: Track[] = [];
+  private currentPlaylistId: string | null = null;
   
   get currentTrack() {
     const index = this.currentTrackIndex.value;
@@ -25,15 +27,40 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
     };
   }
 
-  constructor(private radioSchedulerService: RadioSchedulerService) {}
+  constructor(
+    private radioSchedulerService: RadioSchedulerService,
+    private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.initializeAudio();
+    this.subscribeToPlaylistChanges();
+  }
 
-    this.radioSchedulerService.loadTracks().subscribe(tracks => {
-		this.playlist = tracks;
-		this.loadRandomTrack();
-	});
+  private subscribeToPlaylistChanges(): void {
+    // Load tracks from query param 'playlist' if provided; otherwise random playlist
+    this.route.queryParamMap.subscribe(params => {
+      const pid = params.get('playlist') || undefined;
+      const changed = (pid || null) !== this.currentPlaylistId;
+
+      if (changed && this.audio && !this.audio.paused) {
+        this.audio.pause();
+        this.isPlaying.next(false);
+      }
+      this.currentPlaylistId = pid || null;
+
+      this.radioSchedulerService.loadTracks(pid).subscribe(tracks => {
+        this.playlist = tracks || [];
+        this.prepareFirstTrack();
+      });
+    });
+  }
+
+  private prepareFirstTrack(): void {
+    if (this.audio && this.playlist.length) {
+      const idx = Math.floor(Math.random() * this.playlist.length);
+      this.currentTrackIndex.next(idx);
+      this.audio.src = this.playlist[idx].url;
+    }
   }
 
   private initializeAudio(): void {
@@ -47,8 +74,6 @@ export class RadioPlayerComponent implements OnInit, OnDestroy {
     this.audio.addEventListener('play', () => {
       this.isPlaying.next(true);
     });
-    
-    this.loadRandomTrack();
   }
 
   private loadRandomTrack(): void {//TODO: fix random to play music without duplicates
