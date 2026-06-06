@@ -5,7 +5,7 @@
 
 <div class="main-wrap">
   <div class="mood-picker">
-    <button mat-stroked-button class="mood-btn" (click)="openMoodDialog()">Choose your mood</button>
+    <button mat-stroked-button class="mood-btn" (click)="openMoodDialog()">{{ moodButtonLabel }}</button>
   </div>
 
   <div class="player" [ngClass]="isHome ? 'player-full' : 'player-mini'">

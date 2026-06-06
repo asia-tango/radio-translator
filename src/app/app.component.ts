@@ -24,7 +24,7 @@ export class AppComponent implements OnInit{
     private http: HttpClient
   ) {}
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.http.get<Record<string, string[]>>('assets/audio/catalog.json')
       .subscribe(cat => this.playlistIds = Object.keys(cat));
 
@@ -34,10 +34,24 @@ export class AppComponent implements OnInit{
     });
   }
 
+  get moodButtonLabel(): string {
+    const id = this.currentPlaylistId;
+    if (!id) {
+      return 'Choose your mood';
+    }
+    const labels: Record<string, string> = {
+      party: 'Party',
+      night: 'Night',
+      chill: 'Chill'
+    };
+    return `Mood: ${labels[id] ?? id}`;
+  }
+
   openMoodDialog(): void {
     const ref = this.dialog.open(PlaylistPickerComponent, {
       data: { playlistIds: this.playlistIds, selectedId: this.currentPlaylistId },
-      width: '520px',
+      width: '100%',
+      maxWidth: '420px',
       autoFocus: false,
       panelClass: 'playlist-dialog',
       backdropClass: 'playlist-backdrop'
