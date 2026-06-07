@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MoodPickerComponent } from './components/mood-picker/mood-picker.component';
+import {NavigationComponent} from './components/navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MoodPickerComponent } from './components/mood-picker/mood-picker.compon
     HomeComponent,
     HelpPageComponent,
     PlaylistPickerComponent,
-    MoodPickerComponent
+    MoodPickerComponent,
+    NavigationComponent,
   ],
   imports: [
     BrowserModule,
